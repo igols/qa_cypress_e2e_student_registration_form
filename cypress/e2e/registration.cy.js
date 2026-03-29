@@ -5,12 +5,6 @@ describe('Student Registration page', () => {
     cy.visit('https://demoqa.com/automation-practice-form');
   });
 
-  const hobbies = [
-    'hobbies-checkbox-1',
-    'hobbies-checkbox-2',
-    'hobbies-checkbox-3'
-  ];
-
   it('should fill the form', () => {
     cy.get('#firstName').type('Name');
     cy.get('#lastName').type('LastName');
@@ -22,13 +16,13 @@ describe('Student Registration page', () => {
     cy.get('.react-datepicker__year-select').select('1995');
     cy.get('.react-datepicker__day--015').click();
     cy.get('#subjectsInput').type('Maths{enter}');
-    hobbies.forEach((hobby) => {
-      cy.get(`[for="${hobby}"]`).click();
-    });
+    cy.contains('td', 'Hobbies')
+      .next().should('have.text', 'Sports, Reading, Music');
     cy.get('#currentAddress').type('Ukraine, Kyiv, Khreshchatyk 1');
     cy.get('#state').click();
     cy.contains('NCR').click();
     cy.get('#city').click();
+    cy.contains('Delhi').click();
     cy.get('#submit').click();
 
     cy.get('.modal-content').should('be.visible');
