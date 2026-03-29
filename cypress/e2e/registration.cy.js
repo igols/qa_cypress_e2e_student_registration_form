@@ -2,7 +2,12 @@
 
 describe('Student Registration page', () => {
   before(() => {
-    cy.visit('https://demoqa.com/automation-practice-form');
+    cy.visit('https://demoqa.com/automation-practice-form', {
+      onBeforeLoad: (win) => {
+        Object.defineProperty(win.navigator, 'language', { value: 'en-EN' });
+      },
+      failOnStatusCode: false
+    });
   });
 
   it('should fill the form', () => {
@@ -16,8 +21,9 @@ describe('Student Registration page', () => {
     cy.get('.react-datepicker__year-select').select('1995');
     cy.get('.react-datepicker__day--015').click();
     cy.get('#subjectsInput').type('Maths{enter}');
-    cy.contains('td', 'Hobbies')
-      .next().should('have.text', 'Sports, Reading, Music');
+    cy.get('[for="hobbies-checkbox-1"]').click();
+    cy.get('[for="hobbies-checkbox-2"]').click();
+    cy.get('[for="hobbies-checkbox-3"]').click();
     cy.get('#currentAddress').type('Ukraine, Kyiv, Khreshchatyk 1');
     cy.get('#state').click();
     cy.contains('NCR').click();
@@ -36,6 +42,8 @@ describe('Student Registration page', () => {
       cy.contains('td', 'Date of Birth')
         .next().should('have.text', '15 May,1995');
       cy.contains('td', 'Subjects').next().should('have.text', 'Maths');
+      cy.contains('td', 'Hobbies')
+        .next().should('have.text', 'Sports, Reading, Music');
       cy.contains('td', 'Address')
         .next().should('have.text', 'Ukraine, Kyiv, Khreshchatyk 1');
       cy.contains('td', 'State and City')
